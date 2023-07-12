@@ -1,5 +1,4 @@
-# TEMPLATE: IREE's runtime follows Google style while its compiler follows
-# mostly LLVM style (for naming/etc) but using Google formatting.
+# TEMPLATE: IREE's runtime uses Google style while its compiler uses LLVM style.
 #
 # Users can either inherit this style or override with their own but pinning
 # this keeps the sample code consistent with the IREE runtime code it's using.

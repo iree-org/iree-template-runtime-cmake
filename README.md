@@ -1,6 +1,6 @@
 # IREE Runtime Hello World with CMake
 
-![Build with Latest IREE Release](https://github.com/benvanik/iree-template-runtime-cmake/workflows/IREE%20Runtime%20Template/badge.svg)
+![Build with Latest IREE Release](https://github.com/iree-org/iree-template-runtime-cmake/workflows/IREE%20Runtime%20Template/badge.svg)
 
 ## Instructions
 
@@ -10,7 +10,7 @@ Use GitHub's "Use this template" feature to create a new repository or clone it
 manually:
 
 ```sh
-$ git clone https://github.com/benvanik/iree-template-runtime-cmake.git
+$ git clone https://github.com/iree-org/iree-template-runtime-cmake.git
 $ cd iree-template-runtime-cmake
 $ git submodule update --init --recursive
 ```
@@ -20,7 +20,7 @@ If working in an existing repository then add the submodule and ensure it has
 its submodules initialized:
 
 ```sh
-$ git submodule add https://github.com/iree-org/iree.git third_party/iree/
+$ git submodule add https://github.com/openxla/iree.git third_party/iree/
 $ git submodule update --init --recursive
 ```
 
@@ -68,9 +68,9 @@ CPU architecture.
 $ python -m pip install iree-compiler --upgrade --user
 $ iree-compile \
     --iree-hal-target-backends=llvm-cpu \
-    --iree-llvm-target-triple=x86_64 \
+    --iree-llvmcpu-target-triple=x86_64 \
     simple_mul.mlir \
-    -o simple_mul.vmfb
+    -o build/simple_mul.vmfb
 ```
 
 ### Running the Sample
@@ -82,7 +82,7 @@ execution, providing output storage buffers for results, and stateful programs
 are covered in other IREE samples.
 
 ```sh
-$ ./build/hello_world local-sync simple_mul.vmfb
+$ ./build/hello_world local-sync build/simple_mul.vmfb
 4xf32=1 1.1 1.2 1.3
  *
 4xf32=10 100 1000 10000

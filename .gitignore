@@ -9,6 +9,11 @@ build-*/
 version_info.json
 CMakeUserPresets.json
 
+# Pyenv files
+.python-version
+*.venv
+.venv
+
 # Visual Studio files
 .env
 .vs/

@@ -1,8 +1,8 @@
 // This IREE compiler input represents a model as sourced from some frontend
-// framework (JAX, pytorch, tflite, etc). Based on where the input comes from
-// the compiler may require additional flags; refer to the documentation for
-// frontend-specific instructions:
-//   https://iree-org.github.io/iree/getting-started/
+// framework (JAX, PyTorch, TFLite, etc).
+//
+// Refer to the documentation for frontend-specific instructions:
+//   https://openxla.github.io/iree/guides/ml-frameworks/
 
 // Simple elementwise multiply:
 //   %result = %lhs * %rhs
