@@ -33,21 +33,16 @@ jobs:
             submodule update --init --recursive
     - name: Build sample
       run: |
-        cd $GITHUB_WORKSPACE
-        mkdir build && cd build
-        cmake .. \
-          -GNinja \
+        cmake -B build/ -G Ninja \
           -DCMAKE_C_COMPILER=clang-10 \
           -DCMAKE_CXX_COMPILER=clang++-10
-        cmake --build . --target hello_world
+        cmake --build build/ --target hello_world
     - name: Compile sample module
       run: |
-        cd $GITHUB_WORKSPACE
         iree-compile \
           --iree-hal-target-backends=llvm-cpu \
           simple_mul.mlir \
-          -o simple_mul.vmfb
+          -o build/simple_mul.vmfb
     - name: Test execution
       run: |
-        cd $GITHUB_WORKSPACE
-        ./build/hello_world local-sync simple_mul.vmfb
+        ./build/hello_world local-sync build/simple_mul.vmfb
