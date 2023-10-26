@@ -56,19 +56,13 @@ jobs:
 
   # TODO(scotttodd): fold into build matrix with build_linux?
   windows:
-    name: ${{ matrix.os }} - ${{ matrix.vs-version }}
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
           - os: windows-2019
-            vsversion: 2019
-          - os: windows-2019
-            vsversion: 2022
           - os: windows-2022
-            vsversion: 2019
-          - os: windows-2022
-            vsversion: 2022
     steps:
     - name: Setting up Python
       uses: actions/setup-python@v4
@@ -76,8 +70,6 @@ jobs:
         python-version: "3.11"
     - name: "Configuring MSVC"
       uses: ilammy/msvc-dev-cmd@v1.12.1
-      with:
-        vsversion: ${{ matrix.vsversion }}
     - name: Install IREE compiler
       run: |
         python -m pip install iree-compiler
