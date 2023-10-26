@@ -18,87 +18,72 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_linux:
-    name: Build and Test (Linux)
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install cmake clang ninja-build
-    - name: Setting up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    - name: Install IREE compiler
-      run: |
-        python -m pip install iree-compiler
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Initialize submodules
-      run : |
-        git \
-            -c submodule."third_party/llvm-project".update=none \
-            -c submodule."third_party/stablehlo".update=none \
-            -c submodule."third_party/torch-mlir".update=none \
-            submodule update --init --recursive
-    - name: Build sample
-      run: |
-        cmake -B build/ -G Ninja \
-          -DCMAKE_C_COMPILER=clang-10 \
-          -DCMAKE_CXX_COMPILER=clang++-10
-        cmake --build build/ --target hello_world
-    - name: Compile sample module
-      run: |
-        iree-compile \
-          --iree-hal-target-backends=llvm-cpu \
-          simple_mul.mlir \
-          -o build/simple_mul.vmfb
-    - name: Test execution
-      run: |
-        ./build/hello_world local-sync build/simple_mul.vmfb
-
-  # TODO(scotttodd): fold into build matrix with build_linux?
-  windows:
+  build_and_test:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
+          - os: ubuntu-20.04
           - os: windows-2019
           - os: windows-2022
-    defaults:
-      run:
-        shell: bash
+
     steps:
-    - name: Setting up Python
+
+    ###########################################################################
+    # OS specific setup
+    ###########################################################################
+
+    - name: Install dependencies (Linux)
+      if: contains(matrix.os, 'ubuntu')
+      run: |
+        sudo apt update
+        sudo apt install cmake clang ninja-build
+        export CC=/usr/bin/clang
+        export CXX=/usr/bin/clang++
+
+    - name: Configure MSVC (Windows)
+      if: contains(matrix.os, 'windows')
+      uses: ilammy/msvc-dev-cmd@v1.12.1
+
+    ###########################################################################
+    # General setup
+    ###########################################################################
+
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - name: "Configuring MSVC"
-      uses: ilammy/msvc-dev-cmd@v1.12.1
     - name: Install IREE compiler
       run: |
         python -m pip install iree-compiler
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Initialize submodules
+      shell: bash
       run : |
         git \
             -c submodule."third_party/llvm-project".update=none \
             -c submodule."third_party/stablehlo".update=none \
             -c submodule."third_party/torch-mlir".update=none \
             submodule update --init --recursive
+
+    ###########################################################################
+    # Build and test
+    ###########################################################################
+
     - name: Build sample
       run: |
         cmake -B build/ -G Ninja
         cmake --build build/ --target hello_world
+
     - name: Compile sample module
       run: |
         iree-compile \
           --iree-hal-target-backends=llvm-cpu \
           simple_mul.mlir \
           -o build/simple_mul.vmfb
+
     - name: Test execution
       run: |
         ./build/hello_world local-sync build/simple_mul.vmfb
