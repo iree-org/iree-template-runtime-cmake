@@ -1,6 +1,6 @@
 # IREE Runtime Hello World with CMake
 
-![Build with Latest IREE Release](https://github.com/iree-org/iree-template-runtime-cmake/workflows/IREE%20Runtime%20Template/badge.svg)
+[![Build with Latest IREE Release](https://github.com/iree-org/iree-template-runtime-cmake/actions/workflows/build-and-test.yml/badge.svg?query=branch%3Amain+event%3Apush)](https://github.com/iree-org/iree-template-runtime-cmake/actions/workflows/build-and-test.yml?query=branch%3Amain+event%3Apush)
 
 ## Instructions
 
