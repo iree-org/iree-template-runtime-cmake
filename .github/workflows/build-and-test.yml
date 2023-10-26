@@ -63,6 +63,9 @@ jobs:
         include:
           - os: windows-2019
           - os: windows-2022
+    defaults:
+      run:
+        shell: bash
     steps:
     - name: Setting up Python
       uses: actions/setup-python@v4
