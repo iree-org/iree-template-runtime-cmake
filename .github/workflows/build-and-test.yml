@@ -22,6 +22,7 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: ubuntu-20.04 - clang
@@ -46,6 +47,9 @@ jobs:
             os: windows-2019
           - name: windows-2022 - msvc
             os: windows-2022
+    defaults:
+      run:
+        shell: bash
 
     steps:
 
@@ -79,7 +83,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Initialize submodules
-      shell: bash
       run : |
         git \
             -c submodule."third_party/llvm-project".update=none \
