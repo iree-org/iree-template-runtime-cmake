@@ -78,9 +78,15 @@ jobs:
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
       uses: ilammy/msvc-dev-cmd@v1.12.1
 
+    # - name: Configure clang (Windows)
+    #   if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
+    #   uses: egor-tensin/setup-clang@v1
+
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
-      uses: egor-tensin/setup-clang@v1
+      run: |
+        export CC="C:\Program Files\LLVM\bin\clang.exe"
+        export CXX="C:\Program Files\LLVM\bin\clang++.exe"
 
     ###########################################################################
     # General setup
