@@ -147,6 +147,7 @@ static iree_status_t iree_runtime_demo_perform_mul(
   // Append the function inputs with the HAL device allocator in use by the
   // session. The buffers will be usable within the session and _may_ be usable
   // in other sessions depending on whether they share a compatible device.
+  iree_hal_device_t* device = iree_runtime_session_device(session);
   iree_hal_allocator_t* device_allocator =
       iree_runtime_session_device_allocator(session);
   iree_allocator_t host_allocator =
@@ -158,8 +159,8 @@ static iree_status_t iree_runtime_demo_perform_mul(
     if (iree_status_is_ok(status)) {
       static const iree_hal_dim_t lhs_shape[1] = {4};
       static const float lhs_data[4] = {1.0f, 1.1f, 1.2f, 1.3f};
-      status = iree_hal_buffer_view_allocate_buffer(
-          device_allocator,
+      status = iree_hal_buffer_view_allocate_buffer_copy(
+          device, device_allocator,
           // Shape rank and dimensions:
           IREE_ARRAYSIZE(lhs_shape), lhs_shape,
           // Element type:
@@ -195,8 +196,8 @@ static iree_status_t iree_runtime_demo_perform_mul(
     if (iree_status_is_ok(status)) {
       static const iree_hal_dim_t rhs_shape[1] = {4};
       static const float rhs_data[4] = {10.0f, 100.0f, 1000.0f, 10000.0f};
-      status = iree_hal_buffer_view_allocate_buffer(
-          device_allocator, IREE_ARRAYSIZE(rhs_shape), rhs_shape,
+      status = iree_hal_buffer_view_allocate_buffer_copy(
+          device, device_allocator, IREE_ARRAYSIZE(rhs_shape), rhs_shape,
           IREE_HAL_ELEMENT_TYPE_FLOAT_32,
           IREE_HAL_ENCODING_TYPE_DENSE_ROW_MAJOR,
           (iree_hal_buffer_params_t){
