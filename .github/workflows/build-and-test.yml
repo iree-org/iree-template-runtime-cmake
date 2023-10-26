@@ -19,14 +19,33 @@ concurrency:
 
 jobs:
   build_and_test:
-    name: ${{ matrix.os }}
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          - os: ubuntu-20.04
-          - os: windows-2019
-          - os: windows-2022
+          - name: ubuntu-20.04 - clang
+            os: ubuntu-20.04
+            cc_compiler: clang
+            cxx_compiler: clang++
+          - name: ubuntu-22.04 - clang
+            os: ubuntu-22.04
+            cc_compiler: clang
+            cxx_compiler: clang++
+
+          - name: ubuntu-20.04 - gcc
+            os: ubuntu-20.04
+            cc_compiler: gcc
+            cxx_compiler: g++
+          - name: ubuntu-22.04 - gcc
+            os: ubuntu-22.04
+            cc_compiler: gcc
+            cxx_compiler: g++
+
+          - name: windows-2019 - msvc
+            os: windows-2019
+          - name: windows-2022 - msvc
+            os: windows-2022
 
     steps:
 
@@ -39,8 +58,8 @@ jobs:
       run: |
         sudo apt update
         sudo apt install cmake clang ninja-build
-        export CC=/usr/bin/clang
-        export CXX=/usr/bin/clang++
+        export CC=${{ matrix.cc_compiler }}
+        export CXX=${{ matrix.cxx_compiler }}
 
     - name: Configure MSVC (Windows)
       if: contains(matrix.os, 'windows')
