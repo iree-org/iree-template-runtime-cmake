@@ -80,9 +80,7 @@ jobs:
 
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: clang64
+      uses: egor-tensin/setup-clang@v1
 
     ###########################################################################
     # General setup
