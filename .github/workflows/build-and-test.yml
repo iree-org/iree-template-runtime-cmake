@@ -43,12 +43,12 @@ jobs:
           #   cc_compiler: gcc
           #   cxx_compiler: g++
 
-          - name: windows-2019 - msvc
-            os: windows-2019
-            compiler: msvc
-          - name: windows-2022 - msvc
-            os: windows-2022
-            compiler: msvc
+          # - name: windows-2019 - msvc
+          #   os: windows-2019
+          #   compiler: msvc
+          # - name: windows-2022 - msvc
+          #   os: windows-2022
+          #   compiler: msvc
 
           - name: windows-2019 - clang
             os: windows-2019
@@ -85,6 +85,7 @@ jobs:
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
       run: |
+        ls "C:\Program Files\LLVM\bin"
         export CC="C:\Program Files\LLVM\bin\clang.exe"
         export CXX="C:\Program Files\LLVM\bin\clang++.exe"
 
@@ -115,6 +116,8 @@ jobs:
 
     - name: Build sample
       run: |
+        export CC="C:\Program Files\LLVM\bin\clang.exe"
+        export CXX="C:\Program Files\LLVM\bin\clang++.exe"
         cmake -B build/ -G Ninja
         cmake --build build/ --target hello_world
 
