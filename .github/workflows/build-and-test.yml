@@ -25,28 +25,37 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: ubuntu-20.04 - clang
-            os: ubuntu-20.04
-            cc_compiler: clang
-            cxx_compiler: clang++
-          - name: ubuntu-22.04 - clang
-            os: ubuntu-22.04
-            cc_compiler: clang
-            cxx_compiler: clang++
+          # - name: ubuntu-20.04 - clang
+          #   os: ubuntu-20.04
+          #   cc_compiler: clang
+          #   cxx_compiler: clang++
+          # - name: ubuntu-22.04 - clang
+          #   os: ubuntu-22.04
+          #   cc_compiler: clang
+          #   cxx_compiler: clang++
 
-          - name: ubuntu-20.04 - gcc
-            os: ubuntu-20.04
-            cc_compiler: gcc
-            cxx_compiler: g++
-          - name: ubuntu-22.04 - gcc
-            os: ubuntu-22.04
-            cc_compiler: gcc
-            cxx_compiler: g++
+          # - name: ubuntu-20.04 - gcc
+          #   os: ubuntu-20.04
+          #   cc_compiler: gcc
+          #   cxx_compiler: g++
+          # - name: ubuntu-22.04 - gcc
+          #   os: ubuntu-22.04
+          #   cc_compiler: gcc
+          #   cxx_compiler: g++
 
           - name: windows-2019 - msvc
             os: windows-2019
+            compiler: msvc
           - name: windows-2022 - msvc
             os: windows-2022
+            compiler: msvc
+
+          - name: windows-2019 - clang
+            os: windows-2019
+            compiler: clang
+          - name: windows-2022 - clang
+            os: windows-2022
+            compiler: clang
     defaults:
       run:
         shell: bash
@@ -66,8 +75,14 @@ jobs:
         export CXX=${{ matrix.cxx_compiler }}
 
     - name: Configure MSVC (Windows)
-      if: contains(matrix.os, 'windows')
+      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
       uses: ilammy/msvc-dev-cmd@v1.12.1
+
+    - name: Configure clang (Windows)
+      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: clang64
 
     ###########################################################################
     # General setup
