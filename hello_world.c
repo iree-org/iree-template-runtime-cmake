@@ -170,8 +170,8 @@ static iree_status_t iree_runtime_demo_perform_mul(
           (iree_hal_buffer_params_t){
               // Where to allocate (host or device):
               .type = IREE_HAL_MEMORY_TYPE_DEVICE_LOCAL,
-              // Access to allow to this memory (this is .rodata so READ only):
-              .access = IREE_HAL_MEMORY_ACCESS_READ,
+              // Access to allow to this memory:
+              .access = IREE_HAL_MEMORY_ACCESS_ALL,
               // Intended usage of the buffer (transfers, dispatches, etc):
               .usage = IREE_HAL_BUFFER_USAGE_DEFAULT,
           },
@@ -202,7 +202,7 @@ static iree_status_t iree_runtime_demo_perform_mul(
           IREE_HAL_ENCODING_TYPE_DENSE_ROW_MAJOR,
           (iree_hal_buffer_params_t){
               .type = IREE_HAL_MEMORY_TYPE_DEVICE_LOCAL,
-              .access = IREE_HAL_MEMORY_ACCESS_READ,
+              .access = IREE_HAL_MEMORY_ACCESS_ALL,
               .usage = IREE_HAL_BUFFER_USAGE_DEFAULT,
           },
           iree_make_const_byte_span(rhs_data, sizeof(rhs_data)), &rhs);

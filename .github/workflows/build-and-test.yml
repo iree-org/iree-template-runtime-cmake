@@ -11,6 +11,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,6 +22,10 @@ jobs:
       run: |
         sudo apt update
         sudo apt install cmake clang ninja-build
+    - name: Setting up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
     - name: Install IREE compiler
       run: |
         python -m pip install iree-compiler
@@ -30,6 +35,7 @@ jobs:
       run : |
         git \
             -c submodule."third_party/llvm-project".update=none \
+            -c submodule."third_party/torch-mlir".update=none \
             submodule update --init --recursive
     - name: Build sample
       run: |
