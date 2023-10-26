@@ -35,6 +35,7 @@ jobs:
       run : |
         git \
             -c submodule."third_party/llvm-project".update=none \
+            -c submodule."third_party/stablehlo".update=none \
             -c submodule."third_party/torch-mlir".update=none \
             submodule update --init --recursive
     - name: Build sample
@@ -81,13 +82,12 @@ jobs:
       run : |
         git \
             -c submodule."third_party/llvm-project".update=none \
+            -c submodule."third_party/stablehlo".update=none \
             -c submodule."third_party/torch-mlir".update=none \
             submodule update --init --recursive
     - name: Build sample
       run: |
-        cmake -B build/ -G Ninja \
-          -DCMAKE_C_COMPILER=clang-10 \
-          -DCMAKE_CXX_COMPILER=clang++-10
+        cmake -B build/ -G Ninja
         cmake --build build/ --target hello_world
     - name: Compile sample module
       run: |
