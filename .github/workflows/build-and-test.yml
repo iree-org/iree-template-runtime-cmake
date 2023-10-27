@@ -112,8 +112,6 @@ jobs:
 
     - name: Build sample
       run: |
-        export CC="C:\Program Files\LLVM\bin\clang.exe"
-        export CXX="C:\Program Files\LLVM\bin\clang++.exe"
         cmake -B build/ -G Ninja
         cmake --build build/ --target hello_world
 
