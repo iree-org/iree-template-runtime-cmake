@@ -50,19 +50,22 @@ jobs:
             os: windows-2022
             compiler: msvc
 
-          - name: windows-2019 - clang
-            os: windows-2019
-            compiler: clang
-          - name: windows-2022 - clang
-            os: windows-2022
-            compiler: clang
+          # As of IREE commit 44c93468, Windows only reliably supports MSVC and
+          # clang-cl. clang and gcc builds could be added with a few changes.
 
-          - name: windows-2019 - gcc
-            os: windows-2019
-            compiler: gcc
-          - name: windows-2022 - gcc
-            os: windows-2022
-            compiler: gcc
+          # - name: windows-2019 - clang
+          #   os: windows-2019
+          #   compiler: clang
+          # - name: windows-2022 - clang
+          #   os: windows-2022
+          #   compiler: clang
+
+          # - name: windows-2019 - gcc
+          #   os: windows-2019
+          #   compiler: gcc
+          # - name: windows-2022 - gcc
+          #   os: windows-2022
+          #   compiler: gcc
     defaults:
       run:
         shell: bash
