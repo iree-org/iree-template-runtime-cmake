@@ -74,7 +74,10 @@ jobs:
         export CC=${{ matrix.cc_compiler }}
         export CXX=${{ matrix.cxx_compiler }}
 
-    - name: Configure MSVC (Windows)
+    - name: Install ninja (Windows)
+      run: choco install ninja --yes
+
+    - name: Test versions (Windows)
       if: contains(matrix.os, 'windows')
       run: |
         which cmake
@@ -89,9 +92,6 @@ jobs:
     # - name: Configure clang (Windows)
     #   if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
     #   uses: egor-tensin/setup-clang@v1
-
-    - name: Install ninja (Windows)
-      uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
