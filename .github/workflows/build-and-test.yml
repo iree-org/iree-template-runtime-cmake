@@ -74,29 +74,14 @@ jobs:
         export CC=${{ matrix.cc_compiler }}
         export CXX=${{ matrix.cxx_compiler }}
 
-    - name: Install ninja (Windows)
-      run: choco install ninja --yes
-
-    - name: Test versions (Windows)
-      if: contains(matrix.os, 'windows')
-      run: |
-        which cmake
-        cmake --version
-        which ninja
-        ninja --version
-
     - name: Configure MSVC (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
       uses: ilammy/msvc-dev-cmd@v1.12.1
 
-    # - name: Configure clang (Windows)
-    #   if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
-    #   uses: egor-tensin/setup-clang@v1
-
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
       run: |
-        ls "C:\Program Files\LLVM\bin"
+        choco install ninja --yes
         export CC="C:\Program Files\LLVM\bin\clang.exe"
         export CXX="C:\Program Files\LLVM\bin\clang++.exe"
 
