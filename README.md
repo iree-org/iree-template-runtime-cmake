@@ -1,6 +1,6 @@
 # IREE Runtime Hello World with CMake
 
-![Build with Latest IREE Release](https://github.com/iree-org/iree-template-runtime-cmake/workflows/IREE%20Runtime%20Template/badge.svg)
+[![Build with Latest IREE Release](https://github.com/iree-org/iree-template-runtime-cmake/actions/workflows/build-and-test.yml/badge.svg?query=branch%3Amain+event%3Apush)](https://github.com/iree-org/iree-template-runtime-cmake/actions/workflows/build-and-test.yml?query=branch%3Amain+event%3Apush)
 
 ## Instructions
 
@@ -24,13 +24,13 @@ $ git submodule add https://github.com/openxla/iree.git third_party/iree/
 $ git submodule update --init --recursive
 ```
 
-For a faster checkout the LLVM and torch-mlir dependencies can be dropped as
-this template is only compiling the runtime (only bother if optimizing build
-bots):
+For a faster checkout some compiler-only dependencies can be dropped as this
+template is only compiling the runtime (only bother if optimizing build bots):
 
 ```sh
 $ git \
     -c submodule."third_party/llvm-project".update=none \
+    -c submodule."third_party/stablehlo".update=none \
     -c submodule."third_party/torch-mlir".update=none \
     submodule update --init --recursive
 ```
