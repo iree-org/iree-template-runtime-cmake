@@ -25,37 +25,44 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - name: ubuntu-20.04 - clang
-          #   os: ubuntu-20.04
-          #   cc_compiler: clang
-          #   cxx_compiler: clang++
-          # - name: ubuntu-22.04 - clang
-          #   os: ubuntu-22.04
-          #   cc_compiler: clang
-          #   cxx_compiler: clang++
+          - name: ubuntu-20.04 - clang
+            os: ubuntu-20.04
+            cc_compiler: clang
+            cxx_compiler: clang++
+          - name: ubuntu-22.04 - clang
+            os: ubuntu-22.04
+            cc_compiler: clang
+            cxx_compiler: clang++
 
-          # - name: ubuntu-20.04 - gcc
-          #   os: ubuntu-20.04
-          #   cc_compiler: gcc
-          #   cxx_compiler: g++
-          # - name: ubuntu-22.04 - gcc
-          #   os: ubuntu-22.04
-          #   cc_compiler: gcc
-          #   cxx_compiler: g++
+          - name: ubuntu-20.04 - gcc
+            os: ubuntu-20.04
+            cc_compiler: gcc
+            cxx_compiler: g++
+          - name: ubuntu-22.04 - gcc
+            os: ubuntu-22.04
+            cc_compiler: gcc
+            cxx_compiler: g++
 
-          # - name: windows-2019 - msvc
-          #   os: windows-2019
-          #   compiler: msvc
+          - name: windows-2019 - msvc
+            os: windows-2019
+            compiler: msvc
           - name: windows-2022 - msvc
             os: windows-2022
             compiler: msvc
 
-          # - name: windows-2019 - clang
-          #   os: windows-2019
-          #   compiler: clang
+          - name: windows-2019 - clang
+            os: windows-2019
+            compiler: clang
           - name: windows-2022 - clang
             os: windows-2022
             compiler: clang
+
+          - name: windows-2019 - gcc
+            os: windows-2019
+            compiler: gcc
+          - name: windows-2022 - gcc
+            os: windows-2022
+            compiler: gcc
     defaults:
       run:
         shell: bash
@@ -84,6 +91,12 @@ jobs:
         choco install ninja --yes
         echo "CC='C:\Program Files\LLVM\bin\clang.exe'" >> $GITHUB_ENV
         echo "CXX='C:\Program Files\LLVM\bin\clang++.exe'" >> $GITHUB_ENV
+
+    - name: Configure GCC (Windows)
+      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'gcc')
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        version: 12.2.0
 
     ###########################################################################
     # General setup
