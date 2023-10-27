@@ -46,13 +46,13 @@ jobs:
           # - name: windows-2019 - msvc
           #   os: windows-2019
           #   compiler: msvc
-          # - name: windows-2022 - msvc
-          #   os: windows-2022
-          #   compiler: msvc
+          - name: windows-2022 - msvc
+            os: windows-2022
+            compiler: msvc
 
-          - name: windows-2019 - clang
-            os: windows-2019
-            compiler: clang
+          # - name: windows-2019 - clang
+          #   os: windows-2019
+          #   compiler: clang
           - name: windows-2022 - clang
             os: windows-2022
             compiler: clang
@@ -73,6 +73,14 @@ jobs:
         sudo apt install cmake clang ninja-build
         export CC=${{ matrix.cc_compiler }}
         export CXX=${{ matrix.cxx_compiler }}
+
+    - name: Configure MSVC (Windows)
+      if: contains(matrix.os, 'windows')
+      run: |
+        which cmake
+        cmake --version
+        which ninja
+        ninja --version
 
     - name: Configure MSVC (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
