@@ -82,6 +82,9 @@ jobs:
     #   if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
     #   uses: egor-tensin/setup-clang@v1
 
+    - name: Install ninja (Windows)
+      uses: seanmiddleditch/gha-setup-ninja@master
+
     - name: Configure clang (Windows)
       if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
       run: |
