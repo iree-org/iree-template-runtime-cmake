@@ -20,7 +20,7 @@ If working in an existing repository then add the submodule and ensure it has
 its submodules initialized:
 
 ```sh
-$ git submodule add https://github.com/openxla/iree.git third_party/iree/
+$ git submodule add https://github.com/iree-org/iree.git third_party/iree/
 $ git submodule update --init --recursive
 ```
 
@@ -31,6 +31,7 @@ template is only compiling the runtime (only bother if optimizing build bots):
 $ git \
     -c submodule."third_party/llvm-project".update=none \
     -c submodule."third_party/stablehlo".update=none \
+    -c submodule."third_party/torch-mlir".update=none \
     -c submodule."third_party/torch-mlir".update=none \
     submodule update --init --recursive
 ```
@@ -52,11 +53,11 @@ $ cmake --build build/ --target hello_world
 
 ### Compiling the Sample Module
 
-This sample assumes that the latest IREE compiler release is installed and used
-to compile the module. For many users upgrading their `iree-compiler` install
-when they bump their submodule should be sufficient to ensure the compiler and
-runtime are compatible. In the future the compiler and runtime will have more
-support for version shifting.
+This sample assumes that a compatible IREE compiler release is installed and
+used to compile the module. For many users upgrading their `iree-compiler`
+install when they bump their submodule should be sufficient to ensure the
+compiler and runtime are compatible. In the future the compiler and runtime
+will have more support for version shifting.
 
 The sample currently assumes a CPU HAL driver and only produces a VMFB
 supporting that. Additional compiler options can be used to change the target
@@ -67,7 +68,7 @@ can be accomplished with the `--iree-llvm-target-triple=` flag specifying the
 CPU architecture.
 
 ```sh
-$ python -m pip install iree-compiler --upgrade --user
+$ python -m pip install iree-compiler==20240410.859 --upgrade --user
 $ iree-compile \
     --iree-hal-target-backends=llvm-cpu \
     --iree-llvmcpu-target-triple=x86_64 \
