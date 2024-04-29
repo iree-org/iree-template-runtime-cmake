@@ -2,7 +2,7 @@
 // framework (JAX, PyTorch, TFLite, etc).
 //
 // Refer to the documentation for frontend-specific instructions:
-//   https://openxla.github.io/iree/guides/ml-frameworks/
+//   https://iree.dev/guides/ml-frameworks/
 
 // Simple elementwise multiply:
 //   %result = %lhs * %rhs
