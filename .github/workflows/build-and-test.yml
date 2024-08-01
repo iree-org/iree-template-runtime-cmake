@@ -25,23 +25,36 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: ubuntu-20.04 - clang
+          - name: ubuntu-20.04 - clang 10
             os: ubuntu-20.04
-            cc_compiler: clang
-            cxx_compiler: clang++
-          - name: ubuntu-22.04 - clang
+            cc_compiler: clang-10
+            cxx_compiler: clang++-10
+          - name: ubuntu-22.04 - clang 13
             os: ubuntu-22.04
-            cc_compiler: clang
-            cxx_compiler: clang++
+            cc_compiler: clang-13
+            cxx_compiler: clang++-13
+          - name: ubuntu-24.04 - clang 16
+            os: ubuntu-24.04
+            cc_compiler: clang-16
+            cxx_compiler: clang++-16
 
-          - name: ubuntu-20.04 - gcc
+          - name: ubuntu-20.04 - gcc 10
             os: ubuntu-20.04
-            cc_compiler: gcc
-            cxx_compiler: g++
-          - name: ubuntu-22.04 - gcc
+            cc_compiler: gcc-10
+            cxx_compiler: g++-10
+          - name: ubuntu-22.04 - gcc 10
             os: ubuntu-22.04
-            cc_compiler: gcc
-            cxx_compiler: g++
+            cc_compiler: gcc-10
+            cxx_compiler: g++-10
+          - name: ubuntu-24.04 - gcc 12
+            os: ubuntu-24.04
+            cc_compiler: gcc-12
+            cxx_compiler: g++-12
+
+          - name: macos-14 - clang
+            os: macos-14
+            cc_compiler: clang
+            cxx_compiler: clang++
 
           - name: windows-2019 - msvc
             os: windows-2019
@@ -71,73 +84,79 @@ jobs:
         shell: bash
 
     steps:
+      ###########################################################################
+      # OS specific setup
+      ###########################################################################
 
-    ###########################################################################
-    # OS specific setup
-    ###########################################################################
+      - name: (Linux) Install dependencies
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt update
+          sudo apt install ninja-build
+          echo "CC=${{ matrix.cc_compiler }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.cxx_compiler }}" >> $GITHUB_ENV
 
-    - name: Install dependencies (Linux)
-      if: contains(matrix.os, 'ubuntu')
-      run: |
-        sudo apt update
-        sudo apt install cmake clang ninja-build
-        export CC=${{ matrix.cc_compiler }}
-        export CXX=${{ matrix.cxx_compiler }}
+      - name: (macOS) Install dependencies
+        if: contains(matrix.os, 'macos')
+        run: |
+          brew install ninja
+          echo "CC=${{ matrix.cc_compiler }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.cxx_compiler }}" >> $GITHUB_ENV
 
-    - name: Configure MSVC (Windows)
-      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
-      uses: ilammy/msvc-dev-cmd@v1.12.1
+      - name: (Windows) Configure MSVC
+        if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'msvc')
+        uses: ilammy/msvc-dev-cmd@v1.13.0
 
-    - name: Configure clang (Windows)
-      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
-      run: |
-        choco install ninja --yes
-        echo "CC='C:\Program Files\LLVM\bin\clang.exe'" >> $GITHUB_ENV
-        echo "CXX='C:\Program Files\LLVM\bin\clang++.exe'" >> $GITHUB_ENV
+      - name: (Windows) Configure clang
+        if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'clang')
+        run: |
+          choco install ninja --yes
+          echo "CC='C:\Program Files\LLVM\bin\clang.exe'" >> $GITHUB_ENV
+          echo "CXX='C:\Program Files\LLVM\bin\clang++.exe'" >> $GITHUB_ENV
 
-    - name: Configure GCC (Windows)
-      if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'gcc')
-      uses: egor-tensin/setup-mingw@v2
-      with:
-        version: 12.2.0
+      - name: (Windows) Configure GCC
+        if: contains(matrix.os, 'windows') && contains(matrix.compiler, 'gcc')
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          version: 12.2.0
 
-    ###########################################################################
-    # General setup
-    ###########################################################################
+      ###########################################################################
+      # General setup
+      ###########################################################################
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    - name: Install IREE compiler
-      run: |
-        python -m pip install iree-compiler==20240724.964
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Initialize submodules
-      run : |
-        git \
-            -c submodule."third_party/llvm-project".update=none \
-            -c submodule."third_party/stablehlo".update=none \
-            -c submodule."third_party/torch-mlir".update=none \
-            submodule update --init --recursive
+      - name: Set up Python
+        uses: actions/setup-python@v5.1.1
+        with:
+          python-version: "3.11"
+      - name: Install IREE compiler
+        run: |
+          python -m pip install iree-compiler==20240724.964
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.7
+      - name: Initialize submodules
+        run: |
+          git \
+              -c submodule."third_party/llvm-project".update=none \
+              -c submodule."third_party/stablehlo".update=none \
+              -c submodule."third_party/torch-mlir".update=none \
+              submodule update --init --recursive
 
-    ###########################################################################
-    # Build and test
-    ###########################################################################
+      ###########################################################################
+      # Build and test
+      ###########################################################################
 
-    - name: Build sample
-      run: |
-        cmake -B build/ -G Ninja
-        cmake --build build/ --target hello_world
+      - name: Build sample
+        run: |
+          cmake -B build/ -G Ninja
+          cmake --build build/ --target hello_world
 
-    - name: Compile sample module
-      run: |
-        iree-compile \
-          --iree-hal-target-backends=llvm-cpu \
-          simple_mul.mlir \
-          -o build/simple_mul.vmfb
+      - name: Compile sample module
+        run: |
+          iree-compile \
+            --iree-hal-target-backends=llvm-cpu \
+            simple_mul.mlir \
+            -o build/simple_mul.vmfb
 
-    - name: Test execution
-      run: |
-        ./build/hello_world local-sync build/simple_mul.vmfb
+      - name: Test execution
+        run: |
+          ./build/hello_world local-sync build/simple_mul.vmfb
