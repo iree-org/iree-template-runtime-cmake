@@ -46,7 +46,7 @@ the IREE project and/or pass the configuration to the CMake configure command.
 The sample currently compiles in the synchronous CPU HAL driver (`local-sync`).
 
 ```sh
-$ cmake -B build/ -GNinja .
+$ cmake -B build/ -G Ninja .
 $ cmake --build build/ --target hello_world
 ```
 
@@ -67,7 +67,7 @@ can be accomplished with the `--iree-llvm-target-triple=` flag specifying the
 CPU architecture.
 
 ```sh
-$ python -m pip install iree-compiler==20240410.859 --upgrade --user
+$ python -m pip install iree-compiler==20240828.999 --upgrade --user
 $ iree-compile \
     --iree-hal-target-backends=llvm-cpu \
     --iree-llvmcpu-target-triple=x86_64 \
