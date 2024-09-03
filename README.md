@@ -32,7 +32,6 @@ $ git \
     -c submodule."third_party/llvm-project".update=none \
     -c submodule."third_party/stablehlo".update=none \
     -c submodule."third_party/torch-mlir".update=none \
-    -c submodule."third_party/torch-mlir".update=none \
     submodule update --init --recursive
 ```
 
