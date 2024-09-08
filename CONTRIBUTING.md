@@ -1,20 +1,22 @@
 # How to Contribute
 
-TEMPLATE: remove or adjust this when forking
+**TEMPLATE: remove or adjust this when forking**
 
-## Contributor License Agreement
+We'd love to accept your patches and contributions to this project.
 
-Contributions to this project must be accompanied by a Contributor License
-Agreement. You (or your employer) retain the copyright to your contribution;
-this simply gives us permission to use and redistribute your contributions as
-part of the project. Head over to <https://cla.developers.google.com/> to see
-your current agreements on file or to sign a new one.
+To get started with contributing, please take a look at the
+[Contributing](https://iree.dev/developers/general/contributing/) guide.
 
-You generally only need to submit a CLA once, so if you've already submitted one
-(even if it was for a different project), you probably don't need to do it
-again.
+## Getting in touch
 
-## Community Guidelines
+*   [GitHub issues](https://github.com/iree-org/iree/issues): Feature requests,
+    bugs, and other work tracking
+*   [IREE Discord server](https://discord.gg/wEWh6Z9nMU): Daily development
+    discussions with the core team and collaborators
+*   [iree-discuss email list](https://groups.google.com/forum/#!forum/iree-discuss):
+    Announcements, general and low-priority discussion
 
-This project follows
-[Google's Open Source Community Guidelines](https://opensource.google.com/conduct/).
+## Community guidelines
+
+This project follows the
+[LF Projects code of conduct](https://lfprojects.org/policies/code-of-conduct/).
